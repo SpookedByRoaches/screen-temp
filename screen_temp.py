@@ -22,7 +22,7 @@ from threading import Thread
 from time import sleep
 
 
-config_loc = "/home/bo3lwa/.config/temp_times.conf"
+config_loc = "YOUR LOCATION"
 
 my_loc = path.dirname(__file__)
 file_splitter = "/"
