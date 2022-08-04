@@ -26,7 +26,7 @@ start_time = 18:00
 end_time = 20:00
 ```
 
-**Note that the start_temp of a section NEEDS to be the same as the end of the previous temperature. Otherwise it's going to immediately go to the starting temperature of the current period.**
+**Note that the start_temp of a section NEEDS to be the same as the end of the previous section. Otherwise it's going to immediately go to the starting temperature of the current period.**
  I hope to fix this as soon as possible
 
 What the program would do is change the temperature linearly across the given period
@@ -50,7 +50,7 @@ One more thing you need to do is to supply a configuration file to set the tempe
 After creating the configuration file you need to change the line where it says `YOUR CONFIG LOCATION`
 on line 14 on screen_temp.py
 
-#In the future
+# In the future
 * Validation of the configuration file
 * There is no need to have the starting temperature of a pair if the ending temperature of the previous is going to be the same anyway. 
 So fixing that should be a top priority
