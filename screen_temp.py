@@ -9,8 +9,6 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
-
-from ast import Raise
 from datetime import datetime, timedelta
 from PIL import Image
 from pystray import MenuItem as Item, Icon, Menu
@@ -20,9 +18,10 @@ from configparser import ConfigParser
 from sys import argv
 from threading import Thread
 from time import sleep
+import pdb
 
 
-config_loc = "YOUR LOCATION"
+config_loc = "LOCATION HERE PLEASE"
 
 my_loc = path.dirname(__file__)
 file_splitter = "/"
@@ -190,8 +189,10 @@ def do_other_stuff():
         user_smooth_trans()
     elif (argv[1] == "-q"):
         print_cur_temp()
+    elif (argv[1] == "--test-dpms"):
+        print("Hold on")
     else:
-        print("Unsupported argument only can to testing: -t or debugging")
+        print("Unsupported option {}".format(argv[1]))
 
 
 def get_applicable_pair(pairs, cur_time):
@@ -273,8 +274,16 @@ def exit_program(icon, item):
 def get_screen_status():
     return check_output("xset q", stderr=STDOUT, shell=True).decode("utf-8")
 
-def is_screen_on():
-    return "Monitor" in get_screen_status()
+def handle_dpms(turn_on_dpms):
+    if (turn_on_dpms):
+        dpms_is_on = "Monitor is" in get_screen_status()
+        if (not dpms_is_on):
+            check_output("xset dpms force on", stderr=STDOUT, shell=True)
+
+def is_screen_on(turn_on_dpms=False):
+	if (turn_on_dpms):
+		handle_dpms(turn_on_dpms)
+	return "Monitor is On" in get_screen_status()
 
 def handle_tray():
     image_loc = my_loc + file_splitter + "res" + file_splitter + "sunset.png"
@@ -309,9 +318,10 @@ if __name__ == "__main__":
     th.start()
     cur_temp = 0
     prev_temp = 0
-    was_monitor_on = True
+    was_monitor_on = False
+    # pdb.set_trace()
     while True:
-        is_monitor_on = is_screen_on()
+        is_monitor_on = is_screen_on(turn_on_dpms=True)
         monitor_turned_on = is_monitor_on and (not was_monitor_on)
         cur_time = datetime.now()
         str_time = cur_time.strftime("%H:%M")
